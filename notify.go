@@ -48,18 +48,26 @@ func (r *Receiver) Notify(data *alertmanager.Data) (bool, error) {
 	}
 
 	if issue != nil {
-		// The set of JIRA status categories is fixed, this is a safe check to make.
-		if issue.Fields.Status.StatusCategory.Key != "done" {
-			// Issue is in a "to do" or "in progress" state, all done here.
-			log.V(1).Infof("Issue %s for %s is unresolved, nothing to do", issue.Key, issueLabel)
-			return false, nil
-		}
 		if r.conf.WontFixResolution != "" && issue.Fields.Resolution != nil &&
 			issue.Fields.Resolution.Name == r.conf.WontFixResolution {
 			// Issue is resolved as "Won't Fix" or equivalent, log a message just in case.
 			log.Infof("Issue %s for %s is resolved as %q, not reopening", issue.Key, issueLabel, issue.Fields.Resolution.Name)
 			return false, nil
 		}
+		// Add a new comment
+		// Will write an any case! Even the issue is not in a "done" state!
+		comment := new(jira.Comment)
+		comment.Body = r.tmpl.Execute(r.conf.Description, data)
+		r.client.Issue.AddComment(issue.Key, comment)
+
+		// The set of JIRA status categories is fixed, this is a safe check to make.
+		log.Infof(issue.Fields.Status.StatusCategory.Key)
+		if issue.Fields.Status.StatusCategory.Key != "done" {
+			// Issue is in a "upcoming" or "in progress" state, all done here.
+			log.Infof("Issue %s for %s is unresolved, nothing to do", issue.Key, issueLabel)
+			return false, nil
+		}
+
 		log.Infof("Issue %s for %s was resolved, reopening", issue.Key, issueLabel)
 		return r.reopen(issue.Key)
 	}
