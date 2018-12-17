@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/andygrunwald/go-jira"
-	"github.com/free/jiralert/alertmanager"
+	"github.com/agrrh/jiralert/alertmanager"
 	log "github.com/golang/glog"
 	"github.com/trivago/tgo/tcontainer"
 )

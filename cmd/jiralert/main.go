@@ -9,8 +9,8 @@ import (
 	"runtime"
 	"strconv"
 
-	"github.com/free/jiralert"
-	"github.com/free/jiralert/alertmanager"
+	"github.com/agrrh/jiralert"
+	"github.com/agrrh/jiralert/alertmanager"
 	log "github.com/golang/glog"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	_ "net/http/pprof"
