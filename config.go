@@ -78,7 +78,7 @@ type ReceiverConfig struct {
 
 	// Self base URL, safe to leave empty in most cases
 	// Used in "defaults" section only
-	SelfUrl  string `yaml:"self_url" json:"self_url"`
+	SelfUrl  string `yaml:"self_url,omitempty" json:"self_url,omitempty"`
 
 	// API access fields
 	APIURL   string `yaml:"api_url" json:"api_url"`
@@ -152,10 +152,6 @@ func (c *Config) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	for _, rc := range c.Receivers {
 		if rc.Name == "" {
 			return fmt.Errorf("missing name for receiver %+v", rc)
-		}
-
-		if rc.SelfUrl == "" {
-			rc.SelfUrl = c.Defaults.SelfUrl
 		}
 
 		// Check API access fields
