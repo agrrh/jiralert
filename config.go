@@ -154,6 +154,10 @@ func (c *Config) UnmarshalYAML(unmarshal func(interface{}) error) error {
 			return fmt.Errorf("missing name for receiver %+v", rc)
 		}
 
+		if rc.SelfUrl == "" {
+			rc.SelfUrl = c.Defaults.SelfUrl
+		}
+
 		// Check API access fields
 		if rc.APIURL == "" {
 			if c.Defaults.APIURL == "" {
