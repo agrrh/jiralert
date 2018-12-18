@@ -99,7 +99,7 @@ func main() {
 		requestTotal.WithLabelValues(conf.Name, "200").Inc()
 	})
 
-	http.HandleFunc("/", HomeHandlerFunc())
+	http.HandleFunc("/", HomeHandlerFunc(config))
 	http.HandleFunc("/config", ConfigHandlerFunc(config))
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) { http.Error(w, "OK", http.StatusOK) })
 	http.Handle("/metrics", promhttp.Handler())
