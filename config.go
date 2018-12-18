@@ -76,6 +76,10 @@ func resolveFilepaths(baseDir string, cfg *Config) {
 type ReceiverConfig struct {
 	Name string `yaml:"name" json:"name"`
 
+	// Self base URL, safe to leave empty in most cases
+	// Used in "defaults" section only
+	SelfUrl  string `yaml:"self_url" json:"self_url"`
+
 	// API access fields
 	APIURL   string `yaml:"api_url" json:"api_url"`
 	User     string `yaml:"user" json:"user"`

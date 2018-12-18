@@ -32,10 +32,10 @@ const (
       </head>
       <body>
         <div class="navbar">
-          <div class="navbar-header"><a href="/">JIRAlert</a></div>
-          <div><a href="/config">Configuration</a></div>
-          <div><a href="/metrics">Metrics</a></div>
-          <div><a href="/debug/pprof">Profiling</a></div>
+          <div class="navbar-header"><a href="{{ .SelfUrl }}/">JIRAlert</a></div>
+          <div><a href="{{ .SelfUrl }}/config">Configuration</a></div>
+          <div><a href="{{ .SelfUrl }}/metrics">Metrics</a></div>
+          <div><a href="{{ .SelfUrl }}/debug/pprof">Profiling</a></div>
           <div><a href="{{ .DocsUrl }}">Help</a></div>
         </div>
         {{template "content" .}}
@@ -64,6 +64,8 @@ const (
 type tdata struct {
 	DocsUrl string
 
+	SelfUrl string
+
 	// `/config` only
 	Config string
 
@@ -87,6 +89,7 @@ func pageTemplate(name string) *template.Template {
 func HomeHandlerFunc() func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		homeTemplate.Execute(w, &tdata{
+			SelfUrl: config.Defaults.SelfUrl,
 			DocsUrl: docsUrl,
 		})
 	}
@@ -96,6 +99,7 @@ func HomeHandlerFunc() func(http.ResponseWriter, *http.Request) {
 func ConfigHandlerFunc(config *jiralert.Config) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		configTemplate.Execute(w, &tdata{
+			SelfUrl: config.Defaults.SelfUrl,
 			DocsUrl: docsUrl,
 			Config:  config.String(),
 		})
@@ -107,7 +111,8 @@ func ConfigHandlerFunc(config *jiralert.Config) func(http.ResponseWriter, *http.
 func HandleError(err error, metricsPath string, w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusInternalServerError)
 	errorTemplate.Execute(w, &tdata{
-		DocsUrl: docsUrl,
-		Err:     err,
+			SelfUrl: config.Defaults.SelfUrl,
+			DocsUrl: docsUrl,
+			Err:     err,
 	})
 }

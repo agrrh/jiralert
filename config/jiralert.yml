@@ -1,5 +1,9 @@
 # Global defaults, applied to all receivers where not explicitly overridden. Optional.
 defaults:
+  # Self base URL, safe to leave empty in most cases
+  # Used in "defaults" section only
+  self_url: ""
+
   # API access fields.
   api_url: https://jiralert.atlassian.net
   user: jiralert
